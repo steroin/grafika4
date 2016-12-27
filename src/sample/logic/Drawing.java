@@ -29,6 +29,52 @@ public class Drawing {
         return scene;
     }
 
+    //translate viewPoint do (0,0,0)
+    //obrot wszystkie 3 osie tak zeby sie pokrywaly
+    //odczytaj x i y obiektu z pominieciem z
+
+    public void kurwa(double[] point, double[] viewPoint){
+        Transform t = new Transform();
+        Transform objectTransform = new Transform();
+        t.addTranslation(-viewPoint[0], -viewPoint[1], -viewPoint[2]);    //dodac to !!!
+        objectTransform.addTranslation(-viewPoint[0], -viewPoint[1], -viewPoint[2]);
+        viewPoint = t.tranformPoint(viewPoint);
+        t = new Transform();
+        double oyAngle = 2*Math.PI - Math.atan2(viewPoint[0], viewPoint[2]);          //dobrze
+
+
+        System.out.println("point przed transformacją: ["+point[0]+","+point[1]+","+point[2]+"]");
+        t.addOYRotation(oyAngle);
+        objectTransform.addOYRotation(oyAngle);
+        viewPoint = t.tranformPoint(viewPoint);
+        double oxAngle = Math.atan2(viewPoint[1], viewPoint[2]);                      //dobrze
+        t = new Transform();
+        t.addOXRotation(oxAngle);
+        objectTransform.addOXRotation(oxAngle);
+        viewPoint = t.tranformPoint(viewPoint);
+
+        point = objectTransform.tranformPoint(point);   //TU MAMY KURWA ZNALEZIONE WSPOLRZEDNE W UKLADZIE OBSERWATORA I TO DZIALA XD
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+
+
+        System.out.println("point po transformacji: ["+point[0]+","+point[1]+","+point[2]+"]");
+
+        System.out.println("Na rzutni: ["+point[0]+","+point[1]+"]");
+
+                //zeruj x
+
+                //zeruj y
+
+                //zeruj z
+
+
+/*
+        Transform t = new Transform();
+
+        t.addTranslation(-viewPoint[0], -viewPoint[1], -viewPoint[2]);
+        */
+    }
 
     private void drawAxis(){
         double[] viewPoint = scene.getViewPoint();
@@ -39,9 +85,9 @@ public class Drawing {
 
         Transform t = new Transform();
         double[] middleT = getProjection(middle, viewPoint);
-        double[] xT = getProjection(x, viewPoint);
-        double[] yT = getProjection(y, viewPoint);
-        double[] zT = getProjection(z, viewPoint);
+        double[] xT = proj(viewPoint, x);//getProjection(x, viewPoint);
+        double[] yT = proj(viewPoint, y);//getProjection(y, viewPoint);
+        double[] zT = proj(viewPoint, z);//getProjection(z, viewPoint);
         Line lineX = new Line(middleT[0]+200, middleT[1]+200, xT[0]+200, xT[1]+200);
         Line lineY = new Line(middleT[0]+200, middleT[1]+200, yT[0]+200, yT[1]+200);
         Line lineZ = new Line(middleT[0]+200, middleT[1]+200, zT[0]+200, zT[1]+200);
@@ -53,72 +99,55 @@ public class Drawing {
         canvas.getChildren().setAll(lineX, lineY, lineZ);
     }
 
+    //zapamietac:
+    //rzutnia zawsze OY
+    //widok zawsze (0,0,-10), ale mozna przyblizac i oddalac
+
+    public double[] proj(double[] viewPoint, double[] point){
+        Transform t = new Transform();
+        t.addTranslation(-viewPoint[0], -viewPoint[1], -viewPoint[2]-10);
+        t.addOYRotation(3*Math.PI/2+Math.atan2(point[2]-viewPoint[2]-10, point[0]-viewPoint[0]));
+        double alfa = Math.atan2(point[1]-viewPoint[1], Math.sqrt((point[0]-viewPoint[0])*(point[0]-viewPoint[0]) + (point[2]-viewPoint[2]-10)*(point[2]-viewPoint[2]-10)));
+        t.addOXRotation(alfa);    //krecimy w lewo
+        double[] newPoint = t.tranformPoint(point);
+
+        System.out.println("newPoint: ["+newPoint[0]+","+newPoint[1]+","+newPoint[2]+"]");
+        double d = 10;
+        double z = point[2]-10;
+        double factor = d/(d+z);
+        double[] ret = new double[]{newPoint[0]*factor, newPoint[1]*factor};
+        System.out.println("["+point[0]+","+point[1]+","+point[2]+"]- > ["+ret[0]+","+ret[1]+"]");
+        return ret;
+    }
     public double[] moveViewPoint(double[] point, double[] viewPoint){
         Transform t = new Transform();
-        //t.addTranslation(-point[0], -point[1], -point[2]);
-        //viewPoint = t.tranformPoint(viewPoint);
-        //t.addTranslation(point[0], point[1], point[2]);
-        //t.addOYRotation(3*Math.PI/2 - Math.atan2(viewPoint[2], viewPoint[0]));        //krecimy w lewo
-        t.addOYRotation(Math.PI/2 + Math.atan2(viewPoint[2], viewPoint[0]));        //krecimy w prawo //dobrze kurwa !
+        t.addTranslation(-point[0], -point[1], -point[2]);
+
+        t.addOYRotation(Math.PI/2 + Math.atan2(viewPoint[2]-point[2], viewPoint[0]-point[0]));
 
 
-        //
-        //viewPoint = t.tranformPoint(viewPoint);
-        //t = new Transform();
-        //
-        double alfa = Math.atan2(viewPoint[1], Math.sqrt(viewPoint[0]*viewPoint[0] + viewPoint[2]*viewPoint[2]));
+        double alfa = Math.atan2(viewPoint[1]-point[1], Math.sqrt((viewPoint[0]-point[0])*(viewPoint[0]-point[0]) + (viewPoint[2]-point[2])*(viewPoint[2]-point[2])));
         t.addOXRotation(Math.PI-alfa);    //krecimy w lewo
 
-        /*double alfa = Math.atan2(viewPoint[1], viewPoint[2]);
-        System.out.println("punkt: ["+viewPoint[0]+","+viewPoint[1]+","+viewPoint[2]+"]");
-        System.out.println("alfa: "+alfa);
-        t.addOXRotation(1.0584068);
-        viewPoint = t.tranformPoint(viewPoint);
-        System.out.println("rotacja o 1*:");
-        alfa = Math.atan2(viewPoint[1], viewPoint[2]);
-        System.out.println("punkt: ["+viewPoint[0]+","+viewPoint[1]+","+viewPoint[2]+"]");
-        System.out.println("alfa: "+alfa);*/
-
-
-
-      //  t.addOXRotation(3*Math.PI/2-Math.atan2(viewPoint[1], viewPoint[2]));    //krecimy w prawo
-
-        //System.out.println("OY atan2("+viewPoint[2]+", "+viewPoint[0]+")");
-        //System.out.println(3*Math.PI/2 - Math.atan2(viewPoint[2], viewPoint[0]));
-
-        System.out.println("OX atan2("+viewPoint[1]+", "+viewPoint[2]+")");
-        System.out.println(alfa);
         return t.tranformPoint(viewPoint);
     }
 
     public double[] getProjection(double[] point, double[] viewPoint){
         Transform t = new Transform();
-        t.addTranslation(-point[0], -point[1], -point[2]);
+        //t.addTranslation(-point[0], -point[1], -point[2]);
 
-        double d = Math.abs(point[2]-viewPoint[2]);
+        t.addOYRotation(Math.PI/2 + Math.atan2(viewPoint[2], viewPoint[0]));
 
-        System.out.println("Point: ["+point[0]+","+point[1]+","+point[2]+"]");
-        System.out.println("ViewPoint: ["+viewPoint[0]+","+viewPoint[1]+","+viewPoint[2]+"]");
-        System.out.println("ViewPoint po translacji: ["+viewPoint[0]+","+viewPoint[1]+","+viewPoint[2]+"]");
-        System.out.println("Obrót OY: "+Math.atan2(viewPoint[0], viewPoint[2]));
-        t.addOYRotation(Math.atan2(viewPoint[0], viewPoint[2]));
+        double alfa = Math.atan2(viewPoint[1], Math.sqrt((viewPoint[0])*(viewPoint[0]) + (viewPoint[2])*(viewPoint[2])));
+        t.addOXRotation(2*Math.PI-alfa);    //krecimy w lewo
+        point = t.tranformPoint(point);
+        viewPoint = t.tranformPoint(viewPoint);
 
-        Transform t1 = new Transform();
-        t1.addOYRotation(Math.atan2(viewPoint[0], viewPoint[2]));
-        viewPoint = t1.tranformPoint(viewPoint);
-        System.out.println("ViewPoint po obrocie: ["+viewPoint[0]+","+viewPoint[1]+","+viewPoint[2]+"]");
-
-        System.out.println("Obrót OX; "+(-Math.PI / 2 - Math.atan2(viewPoint[2], viewPoint[1])));
-        t.addOXRotation(-Math.PI / 2 - Math.atan2(viewPoint[2], viewPoint[1]));
-        //t.addOZRotation(fi);
-        point = t.tranformPoint(0,1,0);
-        System.out.println("Wektor po transformacji: ["+point[0]+","+point[1]+","+point[2]+"]");
-
-
+        //System.out.println("point: ["+point[0]+","+point[1]+","+point[2]+"]");
+        //System.out.println("viewpoint: ["+viewPoint[0]+","+viewPoint[1]+","+viewPoint[2]+"]");
+        double d = Math.abs(viewPoint[2]);
         double z = point[2];
         double factor = (d/(d+z));
-        System.out.println("d = "+d+", z = "+z+", factor = "+factor);
-        System.out.println("result: ["+(point[0]*factor)+","+(point[1]*factor)+"]");
         return new double[]{point[0]*factor, point[1]*factor};
     }
 
@@ -154,7 +183,7 @@ public class Drawing {
     }
 
     public void drawScene(){
-        drawAxis();
+        //drawAxis();
         Transform t = new Transform();
         double[] viewPoint = scene.getViewPoint();
         double[][] axisPoints = new double[][]{
@@ -205,7 +234,7 @@ public class Drawing {
             for(double[] p : m.getPoints()){
                 //System.out.println("Punkt po transformacji: ["+transformedP[0]+", "+transformedP[1]+", "+transformedP[2]+"]");
                 //System.out.println("Punkt n rzutni: ["+xPrim+", "+yPrim+"]");
-                projectedPoints.add(getProjection(p, viewPoint));
+                projectedPoints.add(proj(viewPoint, p));
             }
 
             for(int[] tr : m.getTriangles()){
