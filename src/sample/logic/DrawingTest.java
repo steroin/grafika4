@@ -10,14 +10,6 @@ import static org.junit.Assert.*;
  * Created by Sergiusz on 2016-12-27.
  */
 public class DrawingTest {
-    @Test
-    public void kurwa() throws Exception {
-        Drawing d = new Drawing(null, new Scene(null, null, null));
-        double[] point = new double[]{12,5,0};
-        double[] viewPoint = new double[]{4,7,15};
-
-        d.kurwa(point, viewPoint);
-    }
 
     @Test
     public void proj() throws Exception {

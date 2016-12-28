@@ -24,6 +24,30 @@ public class Drawing {
         this.scene = scene;
     }
 
+    private double getCanvasWidth(){
+        return canvas.getPrefWidth();
+    }
+
+    private double getCanvasHeight(){
+        return canvas.getPrefHeight();
+    }
+
+    private double[] mapScreenToCanvas(double[] coords){
+        double[] screen = scene.getScreen();
+        double xOffset = canvas.getPrefWidth()/2;
+        double yOffset = canvas.getPrefHeight()/2;
+
+        if(coords[0]<screen[0] || coords[0]>screen[1] || coords[1]<screen[2] || coords[1]>screen[3])
+            return new double[]{-1,-1};
+
+        double screenWidth = Math.abs(screen[1]-screen[0]);
+        double screenHeight = Math.abs(screen[3]-screen[2]);
+
+        double x = (coords[0]/screenWidth)*canvas.getPrefWidth()+xOffset;
+        double y = (coords[1]/screenHeight)*canvas.getPrefHeight()+yOffset;
+        return new double[]{x,y};
+    }
+
 
     public Scene getScene(){
         return scene;
@@ -33,7 +57,7 @@ public class Drawing {
     //obrot wszystkie 3 osie tak zeby sie pokrywaly
     //odczytaj x i y obiektu z pominieciem z
 
-    public void kurwa(double[] point, double[] viewPoint){
+    public double[] kurwa(double[] point, double[] viewPoint){
         Transform t = new Transform();
         Transform objectTransform = new Transform();
         t.addTranslation(-viewPoint[0], -viewPoint[1], -viewPoint[2]);    //dodac to !!!
@@ -55,7 +79,7 @@ public class Drawing {
 
         point = objectTransform.tranformPoint(point);   //TU MAMY KURWA ZNALEZIONE WSPOLRZEDNE W UKLADZIE OBSERWATORA I TO DZIALA XD
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
+
 
 
         System.out.println("point po transformacji: ["+point[0]+","+point[1]+","+point[2]+"]");
@@ -74,6 +98,8 @@ public class Drawing {
 
         t.addTranslation(-viewPoint[0], -viewPoint[1], -viewPoint[2]);
         */
+
+        return new double[]{point[0], point[1]};
     }
 
     private void drawAxis(){
@@ -234,7 +260,7 @@ public class Drawing {
             for(double[] p : m.getPoints()){
                 //System.out.println("Punkt po transformacji: ["+transformedP[0]+", "+transformedP[1]+", "+transformedP[2]+"]");
                 //System.out.println("Punkt n rzutni: ["+xPrim+", "+yPrim+"]");
-                projectedPoints.add(proj(viewPoint, p));
+                projectedPoints.add(kurwa(p, viewPoint));
             }
 
             for(int[] tr : m.getTriangles()){
