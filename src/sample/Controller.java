@@ -11,6 +11,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import sample.logic.Drawing;
 import sample.model.Model;
 import sample.model.Scene;
@@ -21,10 +22,6 @@ import java.util.ArrayList;
 public class Controller {
 
     @FXML
-    Button but1;
-    @FXML
-    Button but2;
-    @FXML
     Pane canvas;
 
     private Drawing drawing;
@@ -33,50 +30,62 @@ public class Controller {
         drawing = null;
     }
 
-    public void button1_OnClick(){
-        canvas.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-
+    @FXML
+    public void initialize(){
         ArrayList<Model> models = new ArrayList<>();
         models.add(Model.fromFile("C:/Users/Sklep/Desktop/example.brp"));
-        Scene scene = new Scene(new double[]{0,0,0}, new double[]{0,0,0}, models);
+        Scene scene = new Scene(new double[]{0,0,-50}, new double[]{0,0,0}, new double[]{-10,-30,20}, models);
         drawing = new Drawing(canvas, scene);
         drawing.drawScene();
-        //drawing.test();
     }
 
-    public void up(){
-        double[] viewPoint = drawing.getScene().getViewPoint();
-        drawing.getScene().setViewPoint(viewPoint[0], viewPoint[1], viewPoint[2]+1);
-        drawing.drawScene();
-    }
-    public void down(){
-        double[] viewPoint = drawing.getScene().getViewPoint();
-        drawing.getScene().setViewPoint(viewPoint[0], viewPoint[1], viewPoint[2]-1);
-        drawing.drawScene();
-    }
-    public void left(){
-        double[] viewPoint = drawing.getScene().getViewPoint();
-        drawing.getScene().setViewPoint(viewPoint[0], viewPoint[1]-1, viewPoint[2]);
+    public void moveUp(){
+        drawing.getScene().moveUp(1);
         drawing.drawScene();
     }
 
-    public void right(){
-        double[] viewPoint = drawing.getScene().getViewPoint();
-        drawing.getScene().setViewPoint(viewPoint[0], viewPoint[1]+1, viewPoint[2]);
+    public void moveDown(){
+        drawing.getScene().moveDown(1);
         drawing.drawScene();
     }
 
-
-    public void forward(){
-        double[] viewPoint = drawing.getScene().getViewPoint();
-        drawing.getScene().setViewPoint(viewPoint[0]-1, viewPoint[1], viewPoint[2]);
+    public void moveLeft(){
+        drawing.getScene().moveLeft(1);
         drawing.drawScene();
     }
 
+    public void moveRight(){
+        drawing.getScene().moveRight(1);
+        drawing.drawScene();
+    }
 
-    public void backward(){
-        double[] viewPoint = drawing.getScene().getViewPoint();
-        drawing.getScene().setViewPoint(viewPoint[0]+1, viewPoint[1], viewPoint[2]);
+    public void turnUp(){
+        drawing.getScene().turnUp(10);
+        drawing.drawScene();
+    }
+
+    public void turnDown(){
+        drawing.getScene().turnDown(10);
+        drawing.drawScene();
+    }
+
+    public void turnLeft(){
+        drawing.getScene().turnLeft(10);
+        drawing.drawScene();
+    }
+
+    public void turnRight(){
+        drawing.getScene().turnRight(10);
+        drawing.drawScene();
+    }
+
+    public void zoomIn(){
+        drawing.getScene().zoomIn(1);
+        drawing.drawScene();
+    }
+
+    public void zoomOut(){
+        drawing.getScene().zoomOut(1);
         drawing.drawScene();
     }
 }

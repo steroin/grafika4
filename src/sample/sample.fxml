@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
@@ -9,8 +10,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<GridPane alignment="center" hgap="10" prefHeight="675.0" prefWidth="935.0" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane hgap="10" prefHeight="765.0" prefWidth="1133.0" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
       <ColumnConstraints />
       <ColumnConstraints />
       <ColumnConstraints />
@@ -18,19 +21,104 @@
    </columnConstraints>
    <rowConstraints>
       <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
    </rowConstraints>
    <children>
-      <Pane fx:id="canvas" prefHeight="670.0" prefWidth="880.0" />
-      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3">
+      <Pane fx:id="canvas" maxHeight="691.0" maxWidth="796.0" prefHeight="691.0" prefWidth="796.0" style="-fx-background-color: #BBBBBB;" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+      <GridPane prefHeight="232.0" prefWidth="1083.0" style="-fx-background-color: #DDDDDD;" GridPane.rowIndex="1">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1039.0" minWidth="10.0" prefWidth="108.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1039.0" minWidth="0.0" prefWidth="21.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1039.0" minWidth="0.0" prefWidth="42.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1039.0" minWidth="10.0" prefWidth="119.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1039.0" minWidth="0.0" prefWidth="29.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1039.0" minWidth="0.0" prefWidth="46.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1039.0" minWidth="10.0" prefWidth="177.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1039.0" minWidth="10.0" prefWidth="34.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1039.0" minWidth="10.0" prefWidth="71.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="0.0" prefWidth="96.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="10.0" prefWidth="56.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="0.0" prefWidth="94.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="0.0" prefWidth="197.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="78.0" minHeight="7.0" prefHeight="50.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="78.0" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="89.0" minHeight="5.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="92.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="92.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="92.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <Button fx:id="but1" mnemonicParsing="false" onAction="#button1_OnClick" text="Button1" />
-            <Button mnemonicParsing="false" onAction="#up" text="^" />
-            <Button mnemonicParsing="false" onAction="#down" text="v" />
-            <Button mnemonicParsing="false" onAction="#left" text="&lt;" />
-            <Button mnemonicParsing="false" onAction="#right" text="&gt;" />
-            <Button mnemonicParsing="false" onAction="#forward" text="forward" />
-            <Button mnemonicParsing="false" onAction="#backward" text="backward" />
+            <BorderPane prefHeight="66.0" prefWidth="280.0" GridPane.columnIndex="9" GridPane.rowIndex="2" GridPane.rowSpan="2">
+               <top>
+                  <Button fx:id="move_up" mnemonicParsing="false" onAction="#moveUp" text="^" BorderPane.alignment="CENTER" />
+               </top>
+               <bottom>
+                  <Button fx:id="move_down" mnemonicParsing="false" onAction="#moveDown" text="v" BorderPane.alignment="CENTER" />
+               </bottom>
+               <left>
+                  <Button fx:id="move_left" mnemonicParsing="false" onAction="#moveLeft" text="&lt;" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <Button fx:id="move_right" mnemonicParsing="false" onAction="#moveRight" text="&gt;" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <TextField prefHeight="25.0" prefWidth="38.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label text="Współrzędne kamery:" GridPane.columnIndex="1" GridPane.columnSpan="3">
+               <font>
+                  <Font name="Century Gothic" size="14.0" />
+               </font>
+            </Label>
+            <Label text="x:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="y:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label text="z:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label prefHeight="18.0" prefWidth="269.0" text="Współrzędne punktu oświetlenia:" GridPane.columnIndex="4" GridPane.columnSpan="3">
+               <font>
+                  <Font name="Century Gothic" size="14.0" />
+               </font>
+            </Label>
+            <Label text="x:" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Label text="y:" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <Label text="z:" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <TextField GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <TextField GridPane.columnIndex="5" GridPane.rowIndex="2" />
+            <TextField GridPane.columnIndex="5" GridPane.rowIndex="3" />
+            <BorderPane layoutX="484.0" layoutY="28.0" prefHeight="66.0" prefWidth="280.0" GridPane.columnIndex="11" GridPane.rowIndex="2" GridPane.rowSpan="2">
+               <bottom>
+                  <Button fx:id="turn_down" mnemonicParsing="false" onAction="#turnDown" text="v" BorderPane.alignment="CENTER" />
+               </bottom>
+               <left>
+                  <Button fx:id="turn_left" mnemonicParsing="false" onAction="#turnLeft" text="&lt;" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <Button fx:id="turn_right" mnemonicParsing="false" onAction="#turnRight" text="&gt;" BorderPane.alignment="CENTER" />
+               </right>
+               <top>
+                  <Button fx:id="turn_up" mnemonicParsing="false" onAction="#turnUp" text="^" BorderPane.alignment="CENTER" />
+               </top>
+            </BorderPane>
+            <Label text="Przesunięcie:" GridPane.columnIndex="9" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="Century Gothic" size="14.0" />
+               </font>
+            </Label>
+            <Label text="Obrót:" GridPane.columnIndex="11" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="Century Gothic" size="14.0" />
+               </font>
+            </Label>
+            <Label text="Przybliżenie:" GridPane.columnIndex="7" GridPane.columnSpan="2">
+               <font>
+                  <Font name="Century Gothic" size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="zoom_in" mnemonicParsing="false" onAction="#zoomIn" text="+" GridPane.columnIndex="7" GridPane.rowIndex="2" />
+            <Button fx:id="zoom_out" mnemonicParsing="false" onAction="#zoomOut" prefHeight="25.0" prefWidth="23.0" text="-" GridPane.columnIndex="8" GridPane.rowIndex="2" />
          </children>
-      </VBox>
+      </GridPane>
    </children>
 </GridPane>
